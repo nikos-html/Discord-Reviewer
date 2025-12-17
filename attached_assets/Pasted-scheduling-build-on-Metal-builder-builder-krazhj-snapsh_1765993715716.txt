@@ -1,0 +1,146 @@
+scheduling build on Metal builder "builder-krazhj"
+[snapshot] received sha256:8b381631cfe338038518597e2e84933062650f64d40a95a520faa8e66f4c2537 md5:289fe0009404991ae53d91d7e1f9e84c
+receiving snapshot
+119.4 KB
+522ms
+found 'railway.json' at 'railway.json'
+analyzing snapshot
+119.4 KB
+9ms
+uploading snapshot
+119.4 KB
+18ms
+scheduling build on Metal builder "builder-krazhj"
+fetched snapshot sha256:8b381631cfe338038518597e2e84933062650f64d40a95a520faa8e66f4c2537 (122 kB bytes)
+fetching snapshot
+119.4 KB
+271ms
+unpacking archive
+610 KB
+12ms
+using build driver nixpacks-v1.41.0
+ 
+╔═════════════════════ Nixpacks v1.41.0 ═════════════════════╗
+║ setup      │ nodejs_18, npm-9_x, openssl                   ║
+║────────────────────────────────────────────────────────────║
+║ caddy      │ pkgs: caddy                                   ║
+║            │ cmds: caddy fmt --overwrite /assets/Caddyfile ║
+║────────────────────────────────────────────────────────────║
+║ install    │ npm ci                                        ║
+║────────────────────────────────────────────────────────────║
+║ build      │ npm run db:push                               ║
+║────────────────────────────────────────────────────────────║
+║ start      │ npm run start                                 ║
+╚════════════════════════════════════════════════════════════╝
+ 
+ 
+Saved output to:
+  snapshot-target-unpack
+
+internal
+load build definition from Dockerfile
+0ms
+
+internal
+load metadata for ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+377ms
+
+internal
+load .dockerignore
+0ms
+SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "DISCORD_CLIENT_SECRET") (line 13)(https://docs.docker.com/go/dockerfile/rule/secrets-used-in-arg-or-env/)
+ details: Sensitive data should not be used in the ARG or ENV commands
+SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "SESSION_SECRET") (line 13)(https://docs.docker.com/go/dockerfile/rule/secrets-used-in-arg-or-env/)
+ details: Sensitive data should not be used in the ARG or ENV commands
+SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "DISCORD_CLIENT_SECRET") (line 14)(https://docs.docker.com/go/dockerfile/rule/secrets-used-in-arg-or-env/)
+ details: Sensitive data should not be used in the ARG or ENV commands
+SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "SESSION_SECRET") (line 14)(https://docs.docker.com/go/dockerfile/rule/secrets-used-in-arg-or-env/)
+ details: Sensitive data should not be used in the ARG or ENV commands
+UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 24)(https://docs.docker.com/go/dockerfile/rule/undefined-var/)
+ details: Variables should be defined before their use
+
+stage-0
+FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+18ms
+
+internal
+load build context
+0ms
+
+stage-0
+RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d cached
+0ms
+
+stage-0
+COPY .nixpacks/assets /assets/ cached
+0ms
+
+stage-0
+RUN nix-env -if .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix && nix-collect-garbage -d cached
+0ms
+
+stage-0
+COPY .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix .nixpacks/nixpkgs-ba913eda2df8eb72147259189d55932012df6301.nix cached
+0ms
+
+stage-0
+WORKDIR /app/ cached
+0ms
+
+stage-0
+COPY .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix cached
+0ms
+
+stage-0
+COPY . /app/.
+549ms
+
+stage-0
+RUN  caddy fmt --overwrite /assets/Caddyfile
+953ms
+
+stage-0
+COPY . /app/.
+666ms
+
+stage-0
+RUN npm ci
+7s
+Run `npm audit` for details.
+
+stage-0
+COPY . /app/.
+1s
+
+stage-0
+RUN npm run db:push
+1s
+}
+
+stage-0
+RUN printf '\nPATH=/app/node_modules/.bin:$PATH' >> /root/.profile
+785ms
+
+stage-0
+COPY . /app
+1s
+
+exporting to docker image format
+6s
+containerimage.descriptor: eyJtZWRpYVR5cGUiOiJhcHBsaWNhdGlvbi92bmQub2NpLmltYWdlLm1hbmlmZXN0LnYxK2pzb24iLCJkaWdlc3QiOiJzaGEyNTY6ZmY0NGFlZjMwNDBkMmU0YmM0YzIzZmE0YTk4YzM5NTdhYmIzOWU1YmEzMzIzYjM5NWViNDE2Y2ZmNmM5YTBjNCIsInNpemUiOjM3MDQsImFubm90YXRpb25zIjp7Im9yZy5vcGVuY29udGFpbmVycy5pbWFnZS5jcmVhdGVkIjoiMjAyNS0xMi0xN1QxNzo0NzoyM1oifSwicGxhdGZvcm0iOnsiYXJjaGl0ZWN0dXJlIjoiYW1kNjQiLCJvcyI6ImxpbnV4In19
+containerimage.config.digest: sha256:885cd7912ea89ac26f40b2a5685e10c147008776c2652b7750d05dc3a705506e
+containerimage.digest: sha256:ff44aef3040d2e4bc4c23fa4a98c3957abb39e5ba3323b395eb416cff6c9a0c4
+image push
+444 MB / 444 MB
+16.6s
+ 
+====================
+Starting Healthcheck
+====================
+Path: /api/auth/me
+Retry window: 5m0s
+ 
+Attempt #1 failed with service unavailable. Continuing to retry for 4m59s
+Attempt #2 failed with service unavailable. Continuing to retry for 4m48s
+Attempt #3 failed with service unavailable. Continuing to retry for 4m46s
+Attempt #4 failed with service unavailable. Continuing to retry for 4m42s
