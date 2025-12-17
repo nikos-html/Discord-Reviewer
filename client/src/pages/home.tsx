@@ -5,6 +5,7 @@ import { SiDiscord } from "react-icons/si";
 import { Header } from "@/components/header";
 import { FeedbackForm } from "@/components/feedback-form";
 import { FeedbackList } from "@/components/feedback-list";
+import { FeedbackStatsCard } from "@/components/feedback-stats";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -173,8 +174,10 @@ export default function HomePage() {
             </p>
           </div>
 
+          <FeedbackStatsCard />
+
           <div className="grid gap-8 lg:grid-cols-5">
-            <div className="lg:col-span-2 lg:order-2">
+            <div className="lg:col-span-2 lg:order-2 space-y-6">
               {!isAuthenticated && <LoginPrompt />}
               {isAuthenticated && !hasClientRole && <AccessDeniedPrompt user={data.user!} />}
               {isAuthenticated && hasClientRole && <FeedbackForm />}
