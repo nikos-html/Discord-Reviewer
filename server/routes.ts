@@ -114,7 +114,13 @@ export async function registerRoutes(
       }
 
       req.session.userId = user!.id;
-      res.redirect("/");
+      req.session.save((err) => {
+        if (err) {
+          console.error("Session save error:", err);
+          return res.redirect("/?error=session_error");
+        }
+        res.redirect("/");
+      });
     } catch (error) {
       console.error("Discord OAuth error:", error);
       res.redirect("/?error=auth_failed");

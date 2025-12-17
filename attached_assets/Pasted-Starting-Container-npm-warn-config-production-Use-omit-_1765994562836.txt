@@ -1,0 +1,86 @@
+Starting Container
+npm warn config production Use `--omit=dev` instead.
+> rest-express@1.0.0 db:push
+> drizzle-kit push
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/app/drizzle.config.ts'
+Using 'pg' driver for database querying
+[⣷] Pulling schema from database...
+[⣯] Pulling schema from database...
+[✓] Pulling schema from database...
+[✓] Changes applied
+npm warn config production Use `--omit=dev` instead.
+> rest-express@1.0.0 start
+> NODE_ENV=production node dist/index.cjs
+6:01:08 PM [express] serving on port 8080
+6:01:10 PM [express] GET /api/auth/me 200 in 6ms :: {"authenticated":false}
+    at oe.send (/app/dist/index.cjs:53:20561)
+6:01:25 PM [express] GET /api/auth/me 304 in 1ms :: {"authenticated":false}
+    at oe.json (/app/dist/index.cjs:53:21691)
+    at e.json (/app/dist/index.cjs:76:109097)
+6:01:25 PM [express] GET /api/feedbacks 200 in 112ms :: {"feedbacks":[],"total":0,"page":1,"totalPages":0}
+    at /app/dist/index.cjs:76:109415
+Starting Discord OAuth with redirect URI: https://mambaopinie.up.railway.app/api/auth/discord/callback
+    at Pn.handle_error (/app/dist/index.cjs:38:3052)
+6:01:26 PM [express] GET /api/auth/discord 302 in 3ms
+    at S (/app/dist/index.cjs:38:8331)
+    at /app/dist/index.cjs:38:7948
+Discord callback - redirect URI: https://mambaopinie.up.railway.app/api/auth/discord/callback
+6:01:30 PM [express] GET /api/auth/discord/callback 302 in 676ms
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at new NodeError (node:internal/errors:405:5)
+    at ServerResponse.setHeader (node:_http_outgoing:655:11)
+    at oe.set.oe.header (/app/dist/index.cjs:53:25022)
+6:01:31 PM [express] GET /api/auth/me 304 in 0ms :: {"authenticated":false}
+6:01:31 PM [express] GET /api/feedbacks 304 in 6ms :: {"feedbacks":[],"total":0,"page":1,"totalPages":0}
+Starting Discord OAuth with redirect URI: https://mambaopinie.up.railway.app/api/auth/discord/callback
+6:01:41 PM [express] GET /api/auth/discord 302 in 1ms
+Discord callback - redirect URI: https://mambaopinie.up.railway.app/api/auth/discord/callback
+6:01:45 PM [express] GET /api/auth/discord/callback 302 in 558ms
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at e.json (/app/dist/index.cjs:76:109097)
+    at new NodeError (node:internal/errors:405:5)
+    at /app/dist/index.cjs:76:109415
+    at ServerResponse.setHeader (node:_http_outgoing:655:11)
+    at oe.set.oe.header (/app/dist/index.cjs:53:25022)
+    at Pn.handle_error (/app/dist/index.cjs:38:3052)
+    at oe.send (/app/dist/index.cjs:53:20561)
+    at S (/app/dist/index.cjs:38:8331)
+    at oe.json (/app/dist/index.cjs:53:21691)
+    at /app/dist/index.cjs:38:7948
+6:01:45 PM [express] GET /api/auth/me 304 in 1ms :: {"authenticated":false}
+6:01:46 PM [express] GET /api/feedbacks 304 in 8ms :: {"feedbacks":[],"total":0,"page":1,"totalPages":0}
+Starting Discord OAuth with redirect URI: https://mambaopinie.up.railway.app/api/auth/discord/callback
+6:01:47 PM [express] GET /api/auth/discord 302 in 1ms
+Discord callback - redirect URI: https://mambaopinie.up.railway.app/api/auth/discord/callback
+6:01:51 PM [express] GET /api/auth/discord/callback 302 in 384ms
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at new NodeError (node:internal/errors:405:5)
+    at ServerResponse.setHeader (node:_http_outgoing:655:11)
+    at oe.set.oe.header (/app/dist/index.cjs:53:25022)
+    at oe.send (/app/dist/index.cjs:53:20561)
+    at oe.json (/app/dist/index.cjs:53:21691)
+    at e.json (/app/dist/index.cjs:76:109097)
+    at /app/dist/index.cjs:76:109415
+    at Pn.handle_error (/app/dist/index.cjs:38:3052)
+    at S (/app/dist/index.cjs:38:8331)
+    at /app/dist/index.cjs:38:7948
+6:01:52 PM [express] GET /api/auth/me 304 in 0ms :: {"authenticated":false}
+6:01:52 PM [express] GET /api/feedbacks 304 in 7ms :: {"feedbacks":[],"total":0,"page":1,"totalPages":0}
+Starting Discord OAuth with redirect URI: https://mambaopinie.up.railway.app/api/auth/discord/callback
+6:02:20 PM [express] GET /api/auth/discord 302 in 1ms
+Discord callback - redirect URI: https://mambaopinie.up.railway.app/api/auth/discord/callback
+6:02:24 PM [express] GET /api/auth/discord/callback 302 in 678ms
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at new NodeError (node:internal/errors:405:5)
+    at ServerResponse.setHeader (node:_http_outgoing:655:11)
+    at oe.set.oe.header (/app/dist/index.cjs:53:25022)
+    at oe.send (/app/dist/index.cjs:53:20561)
+    at oe.json (/app/dist/index.cjs:53:21691)
+    at e.json (/app/dist/index.cjs:76:109097)
+    at /app/dist/index.cjs:76:109415
+    at Pn.handle_error (/app/dist/index.cjs:38:3052)
+    at S (/app/dist/index.cjs:38:8331)
+    at /app/dist/index.cjs:38:7948
+6:02:25 PM [express] GET /api/auth/me 304 in 1ms :: {"authenticated":false}
+6:02:25 PM [express] GET /api/feedbacks 304 in 23ms :: {"feedbacks":[],"total":0,"page":1,"totalPages":0}
