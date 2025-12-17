@@ -141,13 +141,33 @@ export async function registerRoutes(
     });
   });
 
-  app.get("/api/feedbacks", async (_req: Request, res: Response) => {
+  app.get("/api/feedbacks", async (req: Request, res: Response) => {
     try {
-      const feedbacks = await storage.getFeedbacks();
-      res.json(feedbacks);
+      const { sortBy, sortOrder, rating, page, limit } = req.query;
+      
+      const options = {
+        sortBy: sortBy as "date" | "rating" | undefined,
+        sortOrder: sortOrder as "asc" | "desc" | undefined,
+        ratingFilter: rating ? parseInt(rating as string) : undefined,
+        page: page ? parseInt(page as string) : 1,
+        limit: limit ? parseInt(limit as string) : 10,
+      };
+      
+      const result = await storage.getFeedbacks(options);
+      res.json(result);
     } catch (error) {
       console.error("Error fetching feedbacks:", error);
       res.status(500).json({ message: "Failed to fetch feedbacks" });
+    }
+  });
+
+  app.get("/api/feedbacks/stats", async (_req: Request, res: Response) => {
+    try {
+      const stats = await storage.getFeedbackStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching feedback stats:", error);
+      res.status(500).json({ message: "Failed to fetch stats" });
     }
   });
 
@@ -179,6 +199,77 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error creating feedback:", error);
       res.status(500).json({ message: "Failed to create feedback" });
+    }
+  });
+
+  app.patch("/api/feedbacks/:id", async (req: Request, res: Response) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { id } = req.params;
+    const feedback = await storage.getFeedback(id);
+    
+    if (!feedback) {
+      return res.status(404).json({ message: "Feedback not found" });
+    }
+
+    const user = await storage.getUser(req.session.userId);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    if (feedback.userId !== user.id && !user.isAdmin) {
+      return res.status(403).json({ message: "Cannot edit other users' feedback" });
+    }
+
+    const parseResult = feedbackFormSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      return res.status(400).json({ 
+        message: "Invalid feedback data",
+        errors: parseResult.error.errors 
+      });
+    }
+
+    try {
+      const updated = await storage.updateFeedback(id, {
+        content: parseResult.data.content,
+        rating: parseResult.data.rating || null,
+      });
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating feedback:", error);
+      res.status(500).json({ message: "Failed to update feedback" });
+    }
+  });
+
+  app.delete("/api/feedbacks/:id", async (req: Request, res: Response) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { id } = req.params;
+    const feedback = await storage.getFeedback(id);
+    
+    if (!feedback) {
+      return res.status(404).json({ message: "Feedback not found" });
+    }
+
+    const user = await storage.getUser(req.session.userId);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    if (feedback.userId !== user.id && !user.isAdmin) {
+      return res.status(403).json({ message: "Cannot delete other users' feedback" });
+    }
+
+    try {
+      await storage.deleteFeedback(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting feedback:", error);
+      res.status(500).json({ message: "Failed to delete feedback" });
     }
   });
 

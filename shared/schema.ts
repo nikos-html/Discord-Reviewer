@@ -11,6 +11,7 @@ export const users = pgTable("users", {
   discriminator: varchar("discriminator", { length: 10 }),
   avatar: text("avatar"),
   hasClientRole: boolean("has_client_role").default(false).notNull(),
+  isAdmin: boolean("is_admin").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -20,6 +21,7 @@ export const feedbacks = pgTable("feedbacks", {
   content: text("content").notNull(),
   rating: integer("rating"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at"),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -52,3 +54,9 @@ export type User = typeof users.$inferSelect;
 export type InsertFeedback = z.infer<typeof insertFeedbackSchema>;
 export type Feedback = typeof feedbacks.$inferSelect;
 export type FeedbackWithUser = Feedback & { user: User };
+
+export interface FeedbackStats {
+  totalCount: number;
+  averageRating: number | null;
+  ratingDistribution: { rating: number; count: number }[];
+}
