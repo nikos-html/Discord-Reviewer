@@ -38,11 +38,12 @@ export async function registerRoutes(
       secret: process.env.SESSION_SECRET || "discord-feedback-secret-key",
       resave: false,
       saveUninitialized: false,
+      proxy: true,
       cookie: {
         secure: process.env.NODE_ENV === "production",
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        sameSite: "lax",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       },
     })
   );
