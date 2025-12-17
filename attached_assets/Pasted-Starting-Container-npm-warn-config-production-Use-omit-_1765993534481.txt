@@ -1,0 +1,122 @@
+Starting Container
+npm warn config production Use `--omit=dev` instead.
+5:35:41 PM [express] GET /api/auth/me 200 in 7ms :: {"authenticated":false}
+> rest-express@1.0.0 start
+> NODE_ENV=production node dist/index.cjs
+5:35:40 PM [express] serving on port 8080
+5:37:07 PM [express] GET /api/auth/me 304 in 1ms :: {"authenticated":false}
+  position: '22',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1449',
+  routine: 'parserOpenTable'
+}
+5:39:21 PM [express] GET /api/feedbacks 500 in 88ms :: {"message":"Failed to fetch feedbacks"}
+Error fetching feedbacks: Error: connect ETIMEDOUT fd12:61ab:1176:1:a000:5a:b277:c508:5432
+    at /app/dist/index.cjs:70:13326
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /app/dist/index.cjs:76:97561
+    at async Uf.getFeedbacks (/app/dist/index.cjs:76:101238)
+    at async /app/dist/index.cjs:76:105994 {
+  errno: -110,
+  code: 'ETIMEDOUT',
+  syscall: 'connect',
+  address: 'fd12:61ab:1176:1:a000:5a:b277:c508',
+  port: 5432
+}
+5:39:18 PM [express] GET /api/feedbacks 500 in 130970ms :: {"message":"Failed to fetch feedbacks"}
+5:39:20 PM [express] GET /api/auth/me 304 in 1ms :: {"authenticated":false}
+Error fetching feedbacks: error: relation "feedbacks" does not exist
+    at /app/dist/index.cjs:70:13326
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /app/dist/index.cjs:76:97561
+    at async Uf.getFeedbacks (/app/dist/index.cjs:76:101238)
+    at async /app/dist/index.cjs:76:105994 {
+  length: 108,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+Starting Discord OAuth with redirect URI: https://mambaopinie.up.railway.app/api/auth/discord/callback
+5:39:21 PM [express] GET /api/auth/discord 302 in 3ms
+Discord callback - redirect URI: https://mambaopinie.up.railway.app/api/auth/discord/callback
+  dataType: undefined,
+Discord OAuth error: error: relation "users" does not exist
+  constraint: undefined,
+    at /app/dist/index.cjs:70:13326
+  file: 'parse_relation.c',
+  line: '1449',
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+  routine: 'parserOpenTable'
+    at async /app/dist/index.cjs:76:97561
+}
+5:39:26 PM [express] GET /api/auth/discord/callback 302 in 477ms
+    at async Uf.getUserByDiscordId (/app/dist/index.cjs:76:100619)
+    at async /app/dist/index.cjs:76:105051 {
+  length: 105,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '116',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+5:39:26 PM [express] GET /api/auth/me 304 in 1ms :: {"authenticated":false}
+  hint: undefined,
+Error fetching feedbacks: error: relation "feedbacks" does not exist
+  position: '22',
+  internalPosition: undefined,
+    at /app/dist/index.cjs:70:13326
+  internalQuery: undefined,
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+  where: undefined,
+    at async /app/dist/index.cjs:76:97561
+  schema: undefined,
+    at async Uf.getFeedbacks (/app/dist/index.cjs:76:101238)
+  table: undefined,
+    at async /app/dist/index.cjs:76:105994 {
+  column: undefined,
+  length: 108,
+  severity: 'ERROR',
+  dataType: undefined,
+  code: '42P01',
+  constraint: undefined,
+  detail: undefined,
+  file: 'parse_relation.c',
+  line: '1449',
+  routine: 'parserOpenTable'
+}
+5:39:27 PM [express] GET /api/feedbacks 500 in 20ms :: {"message":"Failed to fetch feedbacks"}
+5:42:58 PM [express] GET /api/auth/me 304 in 1ms :: {"authenticated":false}
+Error fetching feedbacks: error: relation "feedbacks" does not exist
+    at /app/dist/index.cjs:70:13326
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /app/dist/index.cjs:76:97561
+    at async Uf.getFeedbacks (/app/dist/index.cjs:76:101238)
+    at async /app/dist/index.cjs:76:105994 {
+  length: 108,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '22',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
