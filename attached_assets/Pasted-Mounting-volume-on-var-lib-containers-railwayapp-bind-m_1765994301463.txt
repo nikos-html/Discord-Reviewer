@@ -1,0 +1,22 @@
+Mounting volume on: /var/lib/containers/railwayapp/bind-mounts/f0f8476b-e55f-4b05-8341-580bc2bd2392/vol_impkqc9vwktn0q3r
+Starting Container
+Certificate will not expire
+2025-12-17 17:56:43.448 UTC [6] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-12-17 17:56:43.461 UTC [29] LOG:  database system was interrupted; last known up at 2025-12-17 17:55:35 UTC
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+2025-12-17 17:56:43.443 UTC [6] LOG:  starting PostgreSQL 17.7 (Debian 17.7-3.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-12-17 17:56:43.443 UTC [6] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2025-12-17 17:56:43.443 UTC [6] LOG:  listening on IPv6 address "::", port 5432
+2025-12-17 17:56:43.880 UTC [29] LOG:  database system was not properly shut down; automatic recovery in progress
+2025-12-17 17:56:43.887 UTC [29] LOG:  redo starts at 0/1959498
+2025-12-17 17:56:43.887 UTC [29] LOG:  invalid record length at 0/19594D0: expected at least 24, got 0
+2025-12-17 17:56:43.887 UTC [29] LOG:  redo done at 0/1959498 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2025-12-17 17:56:43.892 UTC [27] LOG:  checkpoint starting: end-of-recovery immediate wait
+2025-12-17 17:56:43.907 UTC [27] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.001 s, total=0.018 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/19594D0, redo lsn=0/19594D0
+2025-12-17 17:56:43.915 UTC [6] LOG:  database system is ready to accept connections
+2025-12-17 17:57:44.982 UTC [33] ERROR:  relation "feedbacks" does not exist at character 22
+2025-12-17 17:57:44.982 UTC [33] STATEMENT:  select count(*) from "feedbacks"
+2025-12-17 17:57:49.412 UTC [34] ERROR:  relation "users" does not exist at character 116
+2025-12-17 17:57:49.412 UTC [34] STATEMENT:  select "id", "discord_id", "username", "discriminator", "avatar", "has_client_role", "is_admin", "created_at" from "users" where "users"."discord_id" = $1
+2025-12-17 17:57:50.351 UTC [35] ERROR:  relation "feedbacks" does not exist at character 22
+2025-12-17 17:57:50.351 UTC [35] STATEMENT:  select count(*) from "feedbacks"
