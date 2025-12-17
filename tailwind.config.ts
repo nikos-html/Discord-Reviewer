@@ -81,6 +81,14 @@ export default {
           busy: "rgb(239 68 68)",
           offline: "rgb(156 163 175)",
         },
+        discord: {
+          DEFAULT: "hsl(var(--discord) / <alpha-value>)",
+          foreground: "hsl(var(--discord-foreground) / <alpha-value>)",
+        },
+        star: {
+          filled: "rgb(250 204 21)",
+          empty: "rgb(209 213 219)",
+        },
       },
       fontFamily: {
         sans: ["var(--font-sans)"],

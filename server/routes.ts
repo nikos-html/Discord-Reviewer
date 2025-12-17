@@ -1,16 +1,186 @@
-import type { Express } from "express";
+import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
+import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import { storage } from "./storage";
+import { pool } from "./db";
+import { feedbackFormSchema } from "@shared/schema";
+import {
+  getDiscordAuthUrl,
+  exchangeCodeForToken,
+  getDiscordUser,
+  getGuildMember,
+  hasRequiredRole,
+} from "./discord";
+
+declare module "express-session" {
+  interface SessionData {
+    userId?: string;
+  }
+}
+
+function getBaseUrl(req: Request): string {
+  const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+  const host = req.headers["x-forwarded-host"] || req.get("host");
+  return `${protocol}://${host}`;
+}
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  // put application routes here
-  // prefix all routes with /api
+  const PgSession = connectPgSimple(session);
 
-  // use storage to perform CRUD operations on the storage interface
-  // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
+  app.use(
+    session({
+      store: new PgSession({
+        pool,
+        tableName: "session",
+        createTableIfMissing: true,
+      }),
+      secret: process.env.SESSION_SECRET || "discord-feedback-secret-key",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: process.env.NODE_ENV === "production",
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: "lax",
+      },
+    })
+  );
+
+  app.get("/api/config/redirect-uri", (req: Request, res: Response) => {
+    const baseUrl = getBaseUrl(req);
+    const redirectUri = `${baseUrl}/api/auth/discord/callback`;
+    res.json({ 
+      redirectUri,
+      message: "Dodaj ten URL jako Redirect URI w Discord Developer Portal → OAuth2 → Redirects"
+    });
+  });
+
+  app.get("/api/auth/discord", (req: Request, res: Response) => {
+    const baseUrl = getBaseUrl(req);
+    const redirectUri = `${baseUrl}/api/auth/discord/callback`;
+    console.log("Starting Discord OAuth with redirect URI:", redirectUri);
+    const authUrl = getDiscordAuthUrl(redirectUri);
+    res.redirect(authUrl);
+  });
+
+  app.get("/api/auth/discord/callback", async (req: Request, res: Response) => {
+    const { code, error: discordError, error_description } = req.query;
+
+    if (discordError) {
+      console.error("Discord OAuth error:", discordError, error_description);
+      return res.redirect(`/?error=${discordError}`);
+    }
+
+    if (!code || typeof code !== "string") {
+      return res.redirect("/?error=no_code");
+    }
+
+    try {
+      const baseUrl = getBaseUrl(req);
+      const redirectUri = `${baseUrl}/api/auth/discord/callback`;
+      console.log("Discord callback - redirect URI:", redirectUri);
+
+      const tokenData = await exchangeCodeForToken(code, redirectUri);
+      const discordUser = await getDiscordUser(tokenData.access_token);
+
+      const guildId = process.env.DISCORD_GUILD_ID!;
+      const roleId = process.env.DISCORD_ROLE_ID!;
+
+      const member = await getGuildMember(tokenData.access_token, guildId);
+      const hasRole = hasRequiredRole(member, roleId);
+
+      let user = await storage.getUserByDiscordId(discordUser.id);
+
+      if (user) {
+        user = await storage.updateUser(user.id, {
+          username: discordUser.global_name || discordUser.username,
+          discriminator: discordUser.discriminator,
+          avatar: discordUser.avatar,
+          hasClientRole: hasRole,
+        });
+      } else {
+        user = await storage.createUser({
+          id: discordUser.id,
+          discordId: discordUser.id,
+          username: discordUser.global_name || discordUser.username,
+          discriminator: discordUser.discriminator,
+          avatar: discordUser.avatar,
+          hasClientRole: hasRole,
+        });
+      }
+
+      req.session.userId = user!.id;
+      res.redirect("/");
+    } catch (error) {
+      console.error("Discord OAuth error:", error);
+      res.redirect("/?error=auth_failed");
+    }
+  });
+
+  app.get("/api/auth/me", async (req: Request, res: Response) => {
+    if (!req.session.userId) {
+      return res.json({ authenticated: false });
+    }
+
+    const user = await storage.getUser(req.session.userId);
+    if (!user) {
+      req.session.destroy(() => {});
+      return res.json({ authenticated: false });
+    }
+
+    res.json({ authenticated: true, user });
+  });
+
+  app.get("/api/auth/logout", (req: Request, res: Response) => {
+    req.session.destroy(() => {
+      res.redirect("/");
+    });
+  });
+
+  app.get("/api/feedbacks", async (_req: Request, res: Response) => {
+    try {
+      const feedbacks = await storage.getFeedbacks();
+      res.json(feedbacks);
+    } catch (error) {
+      console.error("Error fetching feedbacks:", error);
+      res.status(500).json({ message: "Failed to fetch feedbacks" });
+    }
+  });
+
+  app.post("/api/feedbacks", async (req: Request, res: Response) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const user = await storage.getUser(req.session.userId);
+    if (!user || !user.hasClientRole) {
+      return res.status(403).json({ message: "Forbidden - requires Client role" });
+    }
+
+    const parseResult = feedbackFormSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      return res.status(400).json({ 
+        message: "Invalid feedback data",
+        errors: parseResult.error.errors 
+      });
+    }
+
+    try {
+      const feedback = await storage.createFeedback({
+        userId: user.id,
+        content: parseResult.data.content,
+        rating: parseResult.data.rating || null,
+      });
+      res.status(201).json(feedback);
+    } catch (error) {
+      console.error("Error creating feedback:", error);
+      res.status(500).json({ message: "Failed to create feedback" });
+    }
+  });
 
   return httpServer;
 }
