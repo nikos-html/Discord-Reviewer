@@ -116,9 +116,10 @@ export async function registerRoutes(
       req.session.userId = user!.id;
       req.session.save((err) => {
         if (err) {
-          console.error("Session save error:", err);
+          console.error("Session save error:", err.message, err.stack);
           return res.redirect("/?error=session_error");
         }
+        console.log("Session saved successfully for user:", user!.id);
         res.redirect("/");
       });
     } catch (error) {
