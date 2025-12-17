@@ -1,9 +1,8 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
-import connectPgSimple from "connect-pg-simple";
+import MemoryStore from "memorystore";
 import { storage } from "./storage";
-import { pool } from "./db";
 import { feedbackFormSchema } from "@shared/schema";
 import {
   getDiscordAuthUrl,
@@ -29,14 +28,12 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  const PgSession = connectPgSimple(session);
+  const SessionStore = MemoryStore(session);
 
   app.use(
     session({
-      store: new PgSession({
-        pool,
-        tableName: "session",
-        createTableIfMissing: true,
+      store: new SessionStore({
+        checkPeriod: 86400000,
       }),
       secret: process.env.SESSION_SECRET || "discord-feedback-secret-key",
       resave: false,
